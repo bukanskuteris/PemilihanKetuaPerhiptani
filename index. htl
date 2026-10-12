@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voting - PEMILIHAN KETUA DPD PERHIPTANI KABUPATEN WONOSOBO</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .candidate-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .candidate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans text-gray-800">
+
+    <!-- ================= HALAMAN LOGIN ================= -->
+    <div id="login-page" class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full border border-gray-200">
+            <div class="text-center mb-6">
+                <img src="https://iili.io/nV4nsZF.jpg" alt="Logo Perhiptani" class="h-24 mx-auto mb-3 object-contain">
+                <h1 class="text-xl font-bold text-green-800">PEMILIHAN KETUA DPD PERHIPTANI</h1>
+                <p class="text-sm font-semibold text-gray-600">KABUPATEN WONOSOBO</p>
+            </div>
+
+            <form id="login-form" onsubmit="return false;">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                    <input type="text" id="login-username" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Masukkan username" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Masukkan password" required>
+                </div>
+                <div id="login-error" class="text-red-500 text-sm mb-4 hidden text-center font-medium"></div>
+
+                <div class="flex flex-col gap-3">
+                    <button onclick="handleLogin('voter')" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-lg shadow transition duration-200">
+                        Masuk sebagai Pemilih
+                    </button>
+                    <button onclick="handleLogin('admin')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-lg shadow transition duration-200">
+                        Masuk sebagai Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= HALAMAN PEMILIH ================= -->
+    <div id="voter-page" class="hidden flex-grow flex-col">
+        <!-- Header Aplikasi -->
+        <header class="bg-green-800 text-white shadow-md">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <img src="https://iili.io/nV4nsZF.jpg" alt="Logo" class="h-10 bg-white rounded p-1 object-contain">
+                    <span class="font-bold text-xl tracking-wide">e-Voting</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="voter-display-name" class="font-medium text-sm md:text-base"></span>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1.5 rounded transition">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Keluar
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Informasi Pemilih -->
+        <div class="bg-white border-b shadow-sm">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="text-gray-600 text-sm">Nama Pemilih: </span>
+                    <strong id="voter-info-name" class="text-gray-800"></strong>
+                </div>
+                <div>
+                    <span class="text-gray-600 text-sm">Status: </span>
+                    <span id="voter-status-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Pemilihan -->
+        <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">Pilih Calon</h2>
+                <p class="text-sm text-gray-500 mt-1">pilih salah satu calon Ketua DPD Perhiptani Kabupaten Wonosobo</p>
+            </div>
+
+            <!-- List Calon -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <!-- Calon 1 -->
+                <div class="candidate-card bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col items-center p-4">
+                    <span class="bg-green-100 text-green-800 font-bold px-3 py-1 rounded-full text-xs mb-3">Calon 1</span>
+                    <img src="https://iili.io/nV4A6le.jpg" alt="Bagus Setyo Wibowo, SP" class="w-32 h-40 object-cover rounded-md mb-3 border">
+                    <h3 class="font-bold text-center text-sm mb-4 h-10 flex items-center justify-center">Bagus Setyo Wibowo, SP</h3>
+                    <input type="radio" name="candidate" value="1" class="w-5 h-5 text-green-600 focus:ring-green-500 candidate-radio">
+                </div>
+
+                <!-- Calon 2 -->
+                <div class="candidate-card bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col items-center p-4">
+                    <span class="bg-green-100 text-green-800 font-bold px-3 py-1 rounded-full text-xs mb-3">Calon 2</span>
+                    <img src="https://iili.io/nV4AUVS.jpg" alt="Riza Asrawan, SP" class="w-32 h-40 object-cover rounded-md mb-3 border">
+                    <h3 class="font-bold text-center text-sm mb-4 h-10 flex items-center justify-center">Riza Asrawan, SP</h3>
+                    <input type="radio" name="candidate" value="2" class="w-5 h-5 text-green-600 focus:ring-green-500 candidate-radio">
+                </div>
+
+                <!-- Calon 3 -->
+                <div class="candidate-card bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col items-center p-4">
+                    <span class="bg-green-100 text-green-800 font-bold px-3 py-1 rounded-full text-xs mb-3">Calon 3</span>
+                    <img src="https://iili.io/nV4Agi7.jpg" alt="Arif Puji Wibowo, SP" class="w-32 h-40 object-cover rounded-md mb-3 border">
+                    <h3 class="font-bold text-center text-sm mb-4 h-10 flex items-center justify-center">Arif Puji Wibowo, SP</h3>
+                    <input type="radio" name="candidate" value="3" class="w-5 h-5 text-green-600 focus:ring-green-500 candidate-radio">
+                </div>
+
+                <!-- Calon 4 -->
+                <div class="candidate-card bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col items-center p-4">
+                    <span class="bg-green-100 text-green-800 font-bold px-3 py-1 rounded-full text-xs mb-3">Calon 4</span>
+                    <img src="https://iili.io/nV4A4f9.jpg" alt="Ani Istikharoh, SP" class="w-32 h-40 object-cover rounded-md mb-3 border">
+                    <h3 class="font-bold text-center text-sm mb-4 h-10 flex items-center justify-center">Ani Istikharoh, SP</h3>
+                    <input type="radio" name="candidate" value="4" class="w-5 h-5 text-green-600 focus:ring-green-500 candidate-radio">
+                </div>
+
+                <!-- Calon 5 -->
+                <div class="candidate-card bg-white rounded-xl shadow border border-gray-200 overflow-hidden flex flex-col items-center p-4">
+                    <span class="bg-green-100 text-green-800 font-bold px-3 py-1 rounded-full text-xs mb-3">Calon 5</span>
+                    <img src="https://iili.io/nV4APUu.jpg" alt="Ciptaningdyah, SP" class="w-32 h-40 object-cover rounded-md mb-3 border">
+                    <h3 class="font-bold text-center text-sm mb-4 h-10 flex items-center justify-center">Ciptaningdyah, SP</h3>
+                    <input type="radio" name="candidate" value="5" class="w-5 h-5 text-green-600 focus:ring-green-500 candidate-radio">
+                </div>
+            </div>
+
+            <!-- Tombol Kirim Pilihan -->
+            <div class="text-center mt-10">
+                <button id="btn-submit-vote" onclick="submitVote()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg text-lg transition duration-200">
+                    Kirim Pilihan
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= HALAMAN ADMIN ================= -->
+    <div id="admin-page" class="hidden flex-grow flex-col">
+        <!-- Header Admin -->
+        <header class="bg-blue-900 text-white shadow-md">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <img src="https://iili.io/nV4nsZF.jpg" alt="Logo" class="h-10 bg-white rounded p-1 object-contain">
+                    <span class="font-bold text-xl tracking-wide">Panel Admin e-Voting</span>
+                </div>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1.5 rounded transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Keluar
+                </button>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+            <!-- Ringkasan Statistik -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-xl shadow border border-gray-200 text-center">
+                    <p class="text-xs text-gray-500 uppercase font-semibold">Total Pemilih</p>
+                    <p class="text-3xl font-extrabold text-gray-800 mt-1" id="stat-total">106</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-gray-200 text-center">
+                    <p class="text-xs text-gray-500 uppercase font-semibold">Sudah Memilih</p>
+                    <p class="text-3xl font-extrabold text-green-600 mt-1" id="stat-voted">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-gray-200 text-center">
+                    <p class="text-xs text-gray-500 uppercase font-semibold">Persentase Partisipasi</p>
+                    <p class="text-3xl font-extrabold text-blue-600 mt-1" id="stat-percentage">0%</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-gray-200 text-center">
+                    <p class="text-xs text-gray-500 uppercase font-semibold">Calon</p>
+                    <p class="text-3xl font-extrabold text-amber-600 mt-1">5</p>
+                </div>
+            </div>
+
+            <!-- Tabel Rekapitulasi -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
+                    <h3 class="font-bold text-lg text-gray-800">Rekapitulasi Hasil</h3>
+                    <button onclick="resetData()" class="text-xs text-red-600 hover:text-red-800 font-semibold border border-red-200 bg-red-50 px-2.5 py-1 rounded">Reset Hasil Suara</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 uppercase text-xs">
+                                <th class="py-3 px-4 border-b w-16 text-center">Nomor</th>
+                                <th class="py-3 px-4 border-b">Nama Calon</th>
+                                <th class="py-3 px-4 border-b text-center">Jumlah Suara</th>
+                                <th class="py-3 px-4 border-b text-center">Persentase</th>
+                                <th class="py-3 px-4 border-b w-1/3">Progres</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recap-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Pop-Up Terima Kasih -->
+    <div id="modal-success" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Terimakasih sudah memilih</h3>
+            <button onclick="closeModal()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg mt-4">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Aplikasi -->
+    <footer class="bg-gray-800 text-white text-center py-4 text-xs font-medium mt-auto">
+        @2026 PANITIA MUSDA DPD PERHIPTANI WONOSOBO
+    </footer>
+
+    <!-- Logic JavaScript -->
+    <script>
+        // Data Pemilih Lengkap dari Google Sheets (106 Pemilih)
+        const votersData = [
+            { username: "User1", password: "ADI123", nama: "ADI NUGROHO" },
+            { username: "User2", password: "ANA123", nama: "ANANG ANDRIYANTO" },
+            { username: "User3", password: "ARI123", nama: "ARIFIANI SETYANINGRUM" },
+            { username: "User4", password: "ARIF12", nama: "ARIF PUJI WIBOWO" },
+            { username: "User5", password: "AWI123", nama: "AWISTA HARDIATI" },
+            { username: "User6", password: "BGS123", nama: "BAGUS SETYO WIBOWO" },
+            { username: "User7", password: "BUR123", nama: "BURHANUDIN DHAMARYANTO" },
+            { username: "User8", password: "CIP123", nama: "CIPTANING DYAH" },
+            { username: "User9", password: "DIA123", nama: "DIAN PRASTIWI" },
+            { username: "User10", password: "DYA123", nama: "DYAH PUSPITO WARDANI" },
+            { username: "User11", password: "DSP123", nama: "DYAH SHINTA PAMUNGKAS" },
+            { username: "User12", password: "ELI123", nama: "ELI MAHFUD" },
+            { username: "User13", password: "END123", nama: "ENDRA SUBIARSO" },
+            { username: "User14", password: "ERN123", nama: "ERNA YULIYANTI" },
+            { username: "User15", password: "ERR123", nama: "ERRIN DESYNTA LISTIYANI" },
+            { username: "User16", password: "FER123", nama: "FERA MAULANA" },
+            { username: "User17", password: "FIT123", nama: "FITRIA DWI ARIANTI" },
+            { username: "User18", password: "GIY123", nama: "GIYANTO" },
+            { username: "User19", password: "HAN123", nama: "HANA ARDAYANI SYAM ARDHI" },
+            { username: "User20", password: "HEN123", nama: "HENI PRASETYONINGSIH" },
+            { username: "User21", password: "IRS123", nama: "IRSAD ADI PURNAWAN" },
+            { username: "User22", password: "ISN123", nama: "ISNA SULISTAMI HADIYATI" },
+            { username: "User23", password: "JAM123", nama: "JAMAL" },
+            { username: "User24", password: "JEA123", nama: "JEANY TAUFAN PRAKOSO" },
+            { username: "User25", password: "KHZ123", nama: "KHOZINUL ASROR" },
+            { username: "User26", password: "KUS123", nama: "KUSUMA ARININGSIH" },
+            { username: "User27", password: "MEY123", nama: "MEYRINA PRIHATININGSIH" },
+            { username: "User28", password: "MIA123", nama: "MIA AGUS WARDHANI" },
+            { username: "User29", password: "MIN123", nama: "MINDASA" },
+            { username: "User30", password: "TDH123", nama: "NARWASTU TEGUH DWI HANDARUJATI" },
+            { username: "User31", password: "NDY123", nama: "NINDYO SULISTIYONO" },
+            { username: "User32", password: "RAT123", nama: "RATIH RESTU DAMAYANTI" },
+            { username: "User33", password: "RTH123", nama: "RATIH WIJAYA" },
+            { username: "User34", password: "RHY123", nama: "RATIH YULIASTRI ERIDANI" },
+            { username: "User35", password: "RIZ123", nama: "RIZA ASRAWAN" },
+            { username: "User36", password: "FIK123", nama: "ROFIK HARYANTO" },
+            { username: "User37", password: "SEP123", nama: "SEPTY HANDAYANI" },
+            { username: "User38", password: "SIT123", nama: "SITA FARIDHA" },
+            { username: "User39", password: "SUSI123", nama: "SUSILINAWATI" },
+            { username: "User40", password: "VERLA12", nama: "VERA LAKSANAWATI" },
+            { username: "User41", password: "YUAR123", nama: "YUARI SUSANTI" },
+            { username: "User42", password: "ZAKY123", nama: "ZAKY 'ADNANY" },
+            { username: "User43", password: "AGAT123", nama: "AGATA YUSIRIA RENY SETYANING DEWI" },
+            { username: "User44", password: "AGUS123", nama: "AGUSTINA RATNA WARDHANI" },
+            { username: "User45", password: "AND123", nama: "ANDI KUSWANTO" },
+            { username: "User46", password: "ANI123", nama: "ANI ISTIKHAROH" },
+            { username: "User47", password: "ANK123", nama: "ANIK MUJIATI" },
+            { username: "User48", password: "DEN123", nama: "DENI RESTIYANINGRUM" },
+            { username: "User49", password: "DEW123", nama: "DEWI SRI HASTUTI" },
+            { username: "User50", password: "END123", nama: "ENDANG HASTUTI MARIA" },
+            { username: "User51", password: "IND123", nama: "INDIKA PRAMESTA SARA" },
+            { username: "User53", password: "MUR323", nama: "MURVI DWINI" },
+            { username: "User54", password: "NGM31N", nama: "NGADIMUN" },
+            { username: "User55", password: "NI23ANA", nama: "NINA LUTFIANA" },
+            { username: "User56", password: "P32AM1H", nama: "PRASIRAMA DENIARDHI" },
+            { username: "User57", password: "SR33ISM", nama: "SRI WISMAYANTI" },
+            { username: "User58", password: "S23RIN2", nama: "SUCIYATI SRI WAKHYUNINGSIH" },
+            { username: "User59", password: "SU09RN", nama: "SUMARNI" },
+            { username: "User60", password: "TAT89T", nama: "TATI ASTUTI" },
+            { username: "User61", password: "TR1298", nama: "TRI SULISTYANI" },
+            { username: "User62", password: "TUG1223", nama: "TUGIYAH" },
+            { username: "User63", password: "WAS432", nama: "WASILATUN ROFIQOH" },
+            { username: "User64", password: "WID456", nama: "WIDIATMOKO" },
+            { username: "User65", password: "WUL321", nama: "WULAN PRIHATININGSIH" },
+            { username: "User66", password: "YUAN32", nama: "WULAN YUANTIKA" },
+            { username: "User67", password: "YUN432", nama: "YUNI HASTUTI" },
+            { username: "User68", password: "ZAEN32", nama: "ZAENAL MUFLICH" },
+            { username: "User69", password: "AGI123", nama: "AGIT PRASETIYA" },
+            { username: "User70", password: "ALE456", nama: "ALEX EKO PRIHANGGO" },
+            { username: "User71", password: "AN12DA", nama: "ANDANG WIDIYANTORO DWINUGROHO" },
+            { username: "User72", password: "ANDY234", nama: "ANDY WITYANTO" },
+            { username: "User73", password: "ASM321", nama: "ASMUI" },
+            { username: "User74", password: "BUN222", nama: "BUNYAMIN" },
+            { username: "User75", password: "DW4543", nama: "DWI KURNIAWATI" },
+            { username: "User76", password: "EDI3332", nama: "EDI YULIANTO" },
+            { username: "User77", password: "EFA545", nama: "EFA SYARIFAH" },
+            { username: "User78", password: "GUN222", nama: "GUNAWAN SUPRIYADI" },
+            { username: "User79", password: "HER2354", nama: "HERIYANA" },
+            { username: "User80", password: "IHF2223", nama: "IHFAD MUDRIK" },
+            { username: "User81", password: "MUD234", nama: "MUDHAKIR" },
+            { username: "User82", password: "M34ASFDI", nama: "MUHAMAD ASFADI" },
+            { username: "User83", password: "MU55H88", nama: "MUHASIM" },
+            { username: "User84", password: "MUK333", nama: "MUKHOLIS" },
+            { username: "User85", password: "RAH4432", nama: "RAHMAN" },
+            { username: "User86", password: "RA3223SAN", nama: "RAHMAN SUSANTO" },
+            { username: "User87", password: "RAT765NA", nama: "RATNO YUANA" },
+            { username: "User88", password: "RID434ARI", nama: "RIDA WULANDARI" },
+            { username: "User89", password: "SAMS32FI", nama: "SAMSUL KAHFI" },
+            { username: "User90", password: "SIAM345", nama: "SITI AMINAH" },
+            { username: "User91", password: "SON345", nama: "SONO" },
+            { username: "User92", password: "S33MYAN", nama: "SRI MULYANI" },
+            { username: "User93", password: "S56YUNI", nama: "SRI WAHYUNI" },
+            { username: "User94", password: "MAR66NO", nama: "SUMARGIYONO" },
+            { username: "User95", password: "SUR76NO", nama: "SURYO PRAMONO" },
+            { username: "User96", password: "SU367NO", nama: "SUTARNO" },
+            { username: "User97", password: "WGN123", nama: "SUWAGINO" },
+            { username: "User98", password: "TPA123", nama: "TEGUH PAMUJI" },
+            { username: "User99", password: "TEG123", nama: "TEGUH WIYONO" },
+            { username: "User100", password: "TRIKO123", nama: "TRIKOYO" },
+            { username: "User101", password: "TRI123", nama: "TRI SUHARTATI" },
+            { username: "User102", password: "USO123", nama: "USODO" },
+            { username: "User103", password: "WBO123", nama: "WAHYU WIBOWO" },
+            { username: "User104", password: "WAL123", nama: "WALUYO" },
+            { username: "User105", password: "WEN123", nama: "WENDI FITOYO" },
+            { username: "User106", password: "WIS123", nama: "WISNU ARI WIBOWO" },
+            { username: "User107", password: "KIR123", nama: "KIRMONO" }
+        ];
+
+        const candidates = [
+            { id: 1, name: "Bagus Setyo Wibowo, SP" },
+            { id: 2, name: "Riza Asrawan, SP" },
+            { id: 3, name: "Arif Puji Wibowo, SP" },
+            { id: 4, name: "Ani Istikharoh, SP" },
+            { id: 5, name: "Ciptaningdyah, SP" }
+        ];
+
+        // Status Pilihan & Suara menggunakan LocalStorage
+        let votedList = JSON.parse(localStorage.getItem('evoting_votedList')) || {};
+        let votes = JSON.parse(localStorage.getItem('evoting_votes')) || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        let currentUser = null;
+
+        function handleLogin(role) {
+            const usernameInput = document.getElementById('login-username').value.trim();
+            const passwordInput = document.getElementById('login-password').value.trim();
+            const errorElement = document.getElementById('login-error');
+
+            errorElement.classList.add('hidden');
+
+            if (!usernameInput || !passwordInput) {
+                errorElement.innerText = "Username dan password harus diisi!";
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (role === 'admin') {
+                if (usernameInput === 'admin' && passwordInput === 'admin') {
+                    showPage('admin-page');
+                    renderAdminDashboard();
+                } else {
+                    errorElement.innerText = "Username atau Password Admin salah!";
+                    errorElement.classList.remove('hidden');
+                }
+            } else if (role === 'voter') {
+                const voter = votersData.find(v => v.username === usernameInput && v.password === passwordInput);
+                if (voter) {
+                    currentUser = voter;
+                    showPage('voter-page');
+                    renderVoterDashboard();
+                } else {
+                    errorElement.innerText = "Username atau Password Pemilih tidak valid!";
+                    errorElement.classList.remove('hidden');
+                }
+            }
+        }
+
+        function renderVoterDashboard() {
+            document.getElementById('voter-display-name').innerText = currentUser.nama;
+            document.getElementById('voter-info-name').innerText = currentUser.nama;
+
+            const isVoted = !!votedList[currentUser.username];
+            const statusBadge = document.getElementById('voter-status-badge');
+            const submitBtn = document.getElementById('btn-submit-vote');
+            const radios = document.querySelectorAll('.candidate-radio');
+
+            if (isVoted) {
+                statusBadge.innerText = "sudah memilih";
+                statusBadge.className = "px-2.5 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 border border-green-300";
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                radios.forEach(r => r.disabled = true);
+            } else {
+                statusBadge.innerText = "belum memilih";
+                statusBadge.className = "px-2.5 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 border border-yellow-300";
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                radios.forEach(r => { r.disabled = false; r.checked = false; });
+            }
+        }
+
+        function submitVote() {
+            if (votedList[currentUser.username]) {
+                alert("Anda sudah memilih sebelumnya.");
+                return;
+            }
+
+            const selectedCandidate = document.querySelector('input[name="candidate"]:checked');
+            if (!selectedCandidate) {
+                alert("Silakan pilih salah satu calon terlebih dahulu!");
+                return;
+            }
+
+            const candidateId = selectedCandidate.value;
+            votes[candidateId] = (votes[candidateId] || 0) + 1;
+            votedList[currentUser.username] = true;
+
+            localStorage.setItem('evoting_votes', JSON.stringify(votes));
+            localStorage.setItem('evoting_votedList', JSON.stringify(votedList));
+
+            renderVoterDashboard();
+            document.getElementById('modal-success').classList.remove('hidden');
+            document.getElementById('modal-success').classList.add('flex');
+        }
+
+        function renderAdminDashboard() {
+            const totalVoters = 106;
+            const votedCount = Object.keys(votedList).length;
+            const percentage = ((votedCount / totalVoters) * 100).toFixed(1);
+
+            document.getElementById('stat-total').innerText = totalVoters;
+            document.getElementById('stat-voted').innerText = votedCount;
+            document.getElementById('stat-percentage').innerText = percentage + "%";
+
+            const tbody = document.getElementById('recap-table-body');
+            tbody.innerHTML = '';
+
+            candidates.forEach(c => {
+                const count = votes[c.id] || 0;
+                const candidatePct = votedCount > 0 ? ((count / votedCount) * 100).toFixed(1) : "0.0";
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b hover:bg-gray-50";
+                tr.innerHTML = `
+                    <td class="py-3 px-4 text-center font-bold text-gray-700">${c.id}</td>
+                    <td class="py-3 px-4 font-medium text-gray-800">${c.name}</td>
+                    <td class="py-3 px-4 text-center font-semibold text-gray-800">${count}</td>
+                    <td class="py-3 px-4 text-center text-gray-600">${candidatePct}%</td>
+                    <td class="py-3 px-4">
+                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div class="bg-green-600 h-3 rounded-full transition-all duration-500" style="width: ${candidatePct}%"></div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('modal-success').classList.add('hidden');
+            document.getElementById('modal-success').classList.remove('flex');
+        }
+
+        function showPage(pageId) {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('voter-page').classList.add('hidden');
+            document.getElementById('voter-page').classList.remove('flex');
+            document.getElementById('admin-page').classList.add('hidden');
+            document.getElementById('admin-page').classList.remove('flex');
+
+            const target = document.getElementById(pageId);
+            target.classList.remove('hidden');
+            if (pageId !== 'login-page') target.classList.add('flex');
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('login-form').reset();
+            showPage('login-page');
+        }
+
+        function resetData() {
+            if (confirm("Apakah Anda yakin ingin mereset seluruh data hasil suara?")) {
+                localStorage.removeItem('evoting_votes');
+                localStorage.removeItem('evoting_votedList');
+                votedList = {};
+                votes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+                renderAdminDashboard();
+            }
+        }
+    </script>
+</body>
+</html>
